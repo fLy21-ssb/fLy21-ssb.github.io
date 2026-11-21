@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>El cuento de Yubita</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;800&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE tierno y juguetón, un regalo de cumpleaños
+   IDEA un libro de cuentos ilustrado que se hojea página a página
+   PICTURE cada página: escena dibujada con Yubita, Benja y Yummito + polaroids reales
+   COLOUR fondo leopardo rosado (como su carcasa), papel blanco rosado, tinta ciruela, rosa fuerte, dorado
+   TYPE Baloo 2 para títulos, Nunito para el texto, Caveat para lo escrito a mano
+   LAYOUT un libro centrado que llena la pantalla del celular; flechas y puntos abajo */
+:root{color-scheme:light;--ink:#3b1830;--soft:#7a4b67;--rose:#e0457b;--rose2:#f7b6cc;--paper:#fffafb;--gold:#d9a441;--plum:#5b2340}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%;margin:0}
+body{color:var(--ink);font:16.5px/1.55 Nunito,system-ui,sans-serif;overflow:hidden;background:#f3c3d4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cg fill='%23d98aa8'%3E%3Cpath d='M14 18c6-6 16-2 14 6s-10 4-14 0z'/%3E%3Cpath d='M70 10c7-2 12 5 7 9s-12 0-7-9z'/%3E%3Cpath d='M98 48c5 4 2 13-5 11s-3-14 5-11z'/%3E%3Cpath d='M40 62c8-3 14 5 8 10s-15-3-8-10z'/%3E%3Cpath d='M12 92c6 1 8 9 2 11s-9-9-2-11z'/%3E%3Cpath d='M76 92c8 0 11 8 5 11s-12-5-5-11z'/%3E%3C/g%3E%3Cg fill='%23a8456e' opacity='.55'%3E%3Ccircle cx='21' cy='21' r='3'/%3E%3Ccircle cx='73' cy='14' r='2.4'/%3E%3Ccircle cx='45' cy='67' r='3'/%3E%3Ccircle cx='79' cy='97' r='2.6'/%3E%3C/g%3E%3C/svg%3E")}
+.stage{height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;padding:12px 12px 6px}
+.book{position:relative;width:min(470px,100%);height:min(860px,100%);border-radius:20px 14px 14px 20px;background:var(--paper);box-shadow:0 18px 40px rgba(91,35,64,.35),inset 14px 0 18px -14px rgba(91,35,64,.35);overflow:hidden;perspective:1600px}
+.page{position:absolute;inset:0;display:flex;flex-direction:column;visibility:hidden;background:var(--paper);border-radius:inherit;overflow:hidden;transform-origin:left center;backface-visibility:hidden}
+.page.on{visibility:visible;z-index:2}
+.page.out{visibility:visible;z-index:3;animation:turnOut .7s ease-in forwards}
+.page.back{animation:turnIn .7s ease-out}
+@keyframes turnOut{to{transform:rotateY(-115deg);opacity:.2;filter:brightness(.8)}}
+@keyframes turnIn{from{transform:rotateY(-115deg);opacity:.2}}
+.art{position:relative;flex:none;height:clamp(180px,40%,330px);overflow:hidden}
+.art::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:multiply;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .85 0 0 0 0 .7 0 0 0 0 .75 0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.art>svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.body{flex:1;overflow-y:auto;padding:16px 22px 56px;-webkit-overflow-scrolling:touch}
+h1,h2{font-family:"Baloo 2",system-ui,sans-serif;line-height:1.05;letter-spacing:-.01em;color:var(--plum);margin:0 0 8px;text-wrap:balance}
+h1{font-size:clamp(40px,11vw,54px);font-weight:800}
+h2{font-size:28px;font-weight:800}
+p{margin:0 0 12px}
+.hand{font-family:Caveat,cursive;font-size:23px;line-height:1.25;color:var(--rose)}
+.num{position:absolute;bottom:12px;right:18px;font-family:Caveat,cursive;font-size:20px;color:var(--soft)}
+.tip{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:800;color:var(--rose);background:#fde6ee;border-radius:99px;padding:4px 12px;margin:2px 0 10px}
+.pols{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 10px;padding:6px 0 4px}
+.pol{margin:0;background:#fff;padding:7px 7px 4px;border-radius:3px;box-shadow:0 4px 12px rgba(59,24,48,.22);transform:rotate(var(--r,0deg));width:126px;cursor:zoom-in;transition:transform .25s}
+.pol:hover,.pol:focus-visible{transform:rotate(0) scale(1.04);outline:none}
+.pol img{display:block;width:100%;height:142px;object-fit:cover;border-radius:2px;background:#f4dbe4}
+.pol.big{width:min(220px,62%)}.pol.big img{height:240px}
+.pol figcaption{font-family:Caveat,cursive;font-size:18px;line-height:1.1;text-align:center;padding:5px 2px 3px;color:var(--ink)}
+.tap{cursor:pointer}
+.nav{display:flex;align-items:center;gap:12px;padding:10px 0 4px}
+.nav button,.btn{font:800 16px Nunito,sans-serif;border:0;border-radius:99px;background:var(--rose);color:#fff;min-width:48px;height:48px;padding:0 18px;cursor:pointer;box-shadow:0 4px 0 #a8285a;transition:transform .1s}
+.nav button:active,.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #a8285a}
+.nav button:focus-visible,.btn:focus-visible,input:focus-visible,.chip:focus-visible{outline:3px solid var(--plum);outline-offset:2px}
+.nav .prev{background:#fff;color:var(--rose);box-shadow:0 4px 0 #e7a3ba}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;max-width:190px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#fff;opacity:.85}
+.dots i.on{background:var(--plum);transform:scale(1.25)}
+input[type=text]{font:600 17px Nunito,sans-serif;color:var(--ink);width:100%;height:48px;border:2px solid var(--rose2);border-radius:14px;padding:0 14px;background:#fff}
+label{display:block;font-weight:800;font-size:15px;margin:10px 0 6px;color:var(--plum)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font:700 14px Nunito,sans-serif;border:2px solid var(--rose2);background:#fff;color:var(--plum);border-radius:99px;height:36px;padding:0 12px;cursor:pointer}
+.chip:hover{background:#fde6ee}
+.btn{margin-top:14px}
+.msg{min-height:24px;font-weight:800;color:var(--rose);margin-top:8px}
+.card{background:#fde6ee;border-radius:16px;padding:14px 16px;margin-top:14px}
+.vales{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:6px}
+.vale{position:relative;border-radius:14px;background:#fff;border:2px dashed #f0a3be;min-height:108px;padding:12px 10px;display:grid;align-content:center;gap:4px;text-align:center;overflow:hidden}
+.vale b{font-family:"Baloo 2",sans-serif;font-weight:800;color:var(--plum);font-size:18px;line-height:1.05}
+.vale small{font-size:13px;color:var(--soft)}
+.vale canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;transition:opacity .5s}
+.vale.done{border-style:solid;border-color:var(--rose);animation:pop2 .5s}
+@keyframes pop2{50%{transform:scale(1.06)}}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.letter{font-family:Caveat,cursive;font-size:24px;line-height:34px;color:var(--ink);background:repeating-linear-gradient(#fff 0 33px,#f6d3df 33px 34px);border-radius:6px;padding:12px 16px 18px;box-shadow:0 6px 16px rgba(59,24,48,.15);transform-origin:top;animation:unfold 1s ease-out}
+.letter p{margin:0 0 34px}
+@keyframes unfold{from{transform:scaleY(.2);opacity:0}}
+.sig{text-align:right;font-size:30px;color:var(--rose)}
+#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:20}
+.lb{position:absolute;inset:0;z-index:15;background:rgba(59,24,48,.78);display:none;place-items:center;padding:20px;cursor:zoom-out}
+.lb.on{display:grid}
+.lb figure{margin:0;background:#fff;padding:10px 10px 6px;border-radius:4px;max-width:100%;transform:rotate(-1.5deg)}
+.lb img{display:block;max-width:100%;max-height:62vh;border-radius:2px}
+.lb figcaption{font-family:Caveat,cursive;font-size:24px;text-align:center;padding-top:6px}
+.bubble{position:absolute;font-family:"Baloo 2",sans-serif;font-weight:800;font-size:22px;color:var(--rose);background:#fff;border-radius:16px;padding:2px 14px;box-shadow:0 4px 10px rgba(59,24,48,.2);pointer-events:none;animation:pop 1.3s ease-out forwards;z-index:4}
+@keyframes pop{0%{transform:scale(.3);opacity:0}20%{transform:scale(1.1);opacity:1}80%{opacity:1}100%{transform:translateY(-30px);opacity:0}}
+svg .sway{animation:sway 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+svg .sway2{animation:sway 2.6s ease-in-out infinite reverse;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes sway{50%{transform:rotate(4deg) translateY(-3px)}}
+svg .fl{animation:fl 4s ease-in-out infinite;transform-box:fill-box}
+svg .fl.d1{animation-delay:-1.3s}svg .fl.d2{animation-delay:-2.6s}
+@keyframes fl{50%{transform:translateY(-10px)}}
+svg .tw{animation:tw 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+svg .tw.d1{animation-delay:-.7s}svg .tw.d2{animation-delay:-1.4s}
+@keyframes tw{50%{transform:scale(.4);opacity:.3}}
+svg .hop{animation:hop .6s ease-out;transform-box:fill-box}
+@keyframes hop{40%{transform:translateY(-22px)}}
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flick .5s ease-in-out infinite alternate}
+@keyframes flick{to{transform:scaleY(1.15) skewX(4deg)}}
+.candle.off .flame{animation:none;transform:scale(0);transition:transform .25s}
+.smoke{opacity:0}
+.candle.off .smoke{animation:smoke 1.4s ease-out forwards;transform-box:fill-box}
+@keyframes smoke{0%{opacity:.7}100%{opacity:0;transform:translateY(-30px) scale(1.6)}}
+.lock-open .shackle{transform:translateY(-14px) rotate(-18deg);transition:transform .5s;transform-box:fill-box;transform-origin:100% 100%}
+@media (prefers-reduced-motion:reduce){*,svg *{animation:none!important;transition:none!important}}
+@media (max-width:420px){.stage{padding:8px 8px 4px}.body{padding:14px 18px 52px}h2{font-size:26px}.pol{width:112px}.pol img{height:128px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+<pattern id="leo" width="18" height="18" patternUnits="userSpaceOnUse" patternTransform="rotate(20)"><path d="M3 4c3-3 7-1 6 3s-6 2-6-3z" fill="#6e2443"/><path d="M12 11c3-1 6 2 4 4s-6 0-4-4z" fill="#6e2443"/><circle cx="6" cy="6" r="1.2" fill="#f3a5c0"/></pattern>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd6e4"/><stop offset="1" stop-color="#fff3f6"/></linearGradient>
+<linearGradient id="night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b4a8f"/><stop offset=".6" stop-color="#c77fac"/><stop offset="1" stop-color="#f4b6c9"/></linearGradient>
+<radialGradient id="spot" cx=".5" cy=".1" r=".9"><stop offset="0" stop-color="#fff6c9" stop-opacity=".85"/><stop offset="1" stop-color="#fff6c9" stop-opacity="0"/></radialGradient>
+<linearGradient id="hairY" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a3e27"/><stop offset=".55" stop-color="#9b6741"/><stop offset="1" stop-color="#d9ab72"/></linearGradient>
+<linearGradient id="hairB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2d2b"/><stop offset="1" stop-color="#231a19"/></linearGradient>
+<radialGradient id="eyeG" cx=".5" cy=".3" r=".75"><stop offset="0" stop-color="#22130e"/><stop offset=".65" stop-color="#4a2a1c"/><stop offset="1" stop-color="#9a6a45"/></radialGradient>
+<radialGradient id="eyeV" cx=".5" cy=".3" r=".75"><stop offset="0" stop-color="#1e2417"/><stop offset=".55" stop-color="#55703b"/><stop offset="1" stop-color="#b3c983"/></radialGradient>
+<radialGradient id="cheek"><stop offset="0" stop-color="#ff86ab" stop-opacity=".8"/><stop offset="1" stop-color="#ff86ab" stop-opacity="0"/></radialGradient>
+<radialGradient id="faceY" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#fde3cf"/><stop offset="1" stop-color="#f3c6a6"/></radialGradient>
+<radialGradient id="faceB" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#fee6d4"/><stop offset="1" stop-color="#f5cbad"/></radialGradient>
+<symbol id="heart" viewBox="0 0 20 18"><path d="M10 17 1.8 8.8C-1 5.8 1 1 5 1c2.2 0 3.6 1.2 5 3 1.4-1.8 2.8-3 5-3 4 0 6 4.8 3.2 7.8z"/></symbol>
+<symbol id="star" viewBox="0 0 20 20"><path d="M10 0l2.6 7.4L20 10l-7.4 2.6L10 20l-2.6-7.4L0 10l7.4-2.6z"/></symbol>
+<symbol id="yu" viewBox="0 0 100 172">
+<path d="M73 38c22 0 29 26 23 52-3 15-11 26-18 28 4-11 5-24 1-36-3-11-9-20-16-26z" fill="url(#hairY)" stroke="#6a3e27" stroke-width="1.2"/>
+<path d="M83 52c7 13 7 31 1 46" stroke="#f3d3a0" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".85"/>
+<path d="M89 62c3 12 2 22-2 32" stroke="#c48f5a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+<ellipse cx="73" cy="38" rx="7.5" ry="6.5" fill="var(--bow,#f48fb1)" stroke="#d9668f" stroke-width="1.2"/><circle cx="71" cy="36" r="1.6" fill="#fff" opacity=".7"/>
+<rect x="38" y="138" width="9" height="20" rx="4.5" fill="#3d2e45"/><rect x="53" y="138" width="9" height="20" rx="4.5" fill="#3d2e45"/>
+<path d="M33 161c0-5 4-7 9-7s8 2 8 6-4 6-9 6-8-1-8-5zM67 161c0-5-4-7-9-7s-8 2-8 6 4 6 9 6 8-1 8-5z" fill="#fff" stroke="#e8c6d3" stroke-width="1.2"/>
+<path d="M33 104q-11 12-8 26" stroke="var(--top,#f48fb1)" stroke-width="10" stroke-linecap="round" fill="none"/><path d="M67 104q11 12 8 26" stroke="var(--top,#f48fb1)" stroke-width="10" stroke-linecap="round" fill="none"/>
+<circle cx="25" cy="132" r="5" fill="#f6cfb3" stroke="#e0a98c"/><circle cx="75" cy="132" r="5" fill="#f6cfb3" stroke="#e0a98c"/>
+<path d="M33 99q17-8 34 0l11 42q-28 9-56 0z" fill="var(--top,#f48fb1)" stroke="var(--topd,#d9668f)" stroke-width="1.4" stroke-linejoin="round"/>
+<path d="M33 99q17-8 34 0l11 42q-28 9-56 0z" fill="url(#leo)" opacity="var(--leo,.35)"/>
+<path d="M42 97q8 8 16 0" stroke="var(--col,#fff)" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<circle cx="16" cy="64" r="6.5" fill="#f6cfb3" stroke="#e0a98c" stroke-width="1.2"/><circle cx="84" cy="64" r="6.5" fill="#f6cfb3" stroke="#e0a98c" stroke-width="1.2"/>
+<use href="#heart" x="13" y="70" width="6" height="5.4" fill="#e9bf55"/><use href="#heart" x="81" y="70" width="6" height="5.4" fill="#e9bf55"/>
+<path d="M16 58c0-22 15-37 34-37s34 15 34 37c0 21-15 35-34 35S16 79 16 58z" fill="url(#faceY)" stroke="#e0a98c" stroke-width="1.3"/>
+<path d="M14 60C11 30 29 15 50 15s39 15 36 45c-4-15-14-25-28-27-3 0-5 1-8 1s-5-1-8-1C28 35 18 45 14 60z" fill="url(#hairY)" stroke="#6a3e27" stroke-width="1.2"/>
+<path d="M29 26q21-11 42 0" stroke="#fff" stroke-opacity=".45" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+<path d="M22 40q8-12 22-15M78 40q-8-12-22-15" stroke="#e6bb80" stroke-width="2" fill="none" stroke-linecap="round" opacity=".9"/>
+<path d="M50 16v17" stroke="#6a3e27" stroke-width="1.2" opacity=".6"/>
+<path d="M30 47q6-3 12 0M58 47q6-3 12 0" stroke="#6a3e27" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+<ellipse cx="37" cy="62" rx="6.8" ry="8.4" fill="url(#eyeG)"/><circle cx="39.4" cy="58.6" r="2.8" fill="#fff"/><circle cx="34.6" cy="65.4" r="1.2" fill="#fff"/>
+<ellipse cx="63" cy="62" rx="6.8" ry="8.4" fill="url(#eyeG)"/><circle cx="65.4" cy="58.6" r="2.8" fill="#fff"/><circle cx="60.6" cy="65.4" r="1.2" fill="#fff"/>
+<path d="M30 56l-3-2.5M30.5 59.5l-3.6-.6M70 56l3-2.5M69.5 59.5l3.6-.6" stroke="#22130e" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="24" y="50" width="25.5" height="23" rx="9" fill="#fff" fill-opacity=".14" stroke="var(--glass,#8a4f2e)" stroke-width="2.3"/>
+<rect x="50.5" y="50" width="25.5" height="23" rx="9" fill="#fff" fill-opacity=".14" stroke="var(--glass,#8a4f2e)" stroke-width="2.3"/>
+<path d="M28 51.6h17.5M54.5 51.6h17.5" stroke="#ecc86e" stroke-width="1.1" opacity=".9"/><path d="M27 55q2-3 6-3.4" stroke="#fff" stroke-width="1.4" fill="none" opacity=".8" stroke-linecap="round"/>
+<ellipse cx="27" cy="78" rx="8.5" ry="5.5" fill="url(#cheek)"/><ellipse cx="73" cy="78" rx="8.5" ry="5.5" fill="url(#cheek)"/>
+<circle cx="44" cy="75" r="1.1" fill="#6b4434"/>
+<path d="M50 69.5q1.4 2-.4 3.2" stroke="#d6967c" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+<path d="M44.5 79q5.5 5.5 11 0q-5.5 2-11 0z" fill="#d8557d" stroke="#b83f66" stroke-width="1.1" stroke-linejoin="round"/>
+</symbol>
+<symbol id="be" viewBox="0 0 100 172">
+<rect x="37" y="138" width="11" height="20" rx="5" fill="#2f2a36"/><rect x="52" y="138" width="11" height="20" rx="5" fill="#2f2a36"/>
+<path d="M32 161c0-5 5-7 10-7s9 2 9 6-4 6-10 6-9-1-9-5zM68 161c0-5-5-7-10-7s-9 2-9 6 4 6 10 6 9-1 9-5z" fill="#fff" stroke="#dcd5df" stroke-width="1.2"/>
+<path d="M30 104q-12 13-8 27" stroke="var(--hood,#3d3649)" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M70 104q12 13 8 27" stroke="var(--hood,#3d3649)" stroke-width="12" stroke-linecap="round" fill="none"/>
+<circle cx="22" cy="133" r="5.4" fill="#f7d2b8" stroke="#e3ad90"/><circle cx="78" cy="133" r="5.4" fill="#f7d2b8" stroke="#e3ad90"/>
+<path d="M29 100q21-10 42 0l9 42q-30 9-60 0z" fill="var(--hood,#3d3649)" stroke="#2a2533" stroke-width="1.4" stroke-linejoin="round"/>
+<path d="M38 96q12 10 24 0" fill="none" stroke="#57506a" stroke-width="5" stroke-linecap="round"/>
+<path d="M45 102v11M55 102v11" stroke="#efe9f2" stroke-width="1.6" stroke-linecap="round"/><circle cx="45" cy="114" r="1.6" fill="#efe9f2"/><circle cx="55" cy="114" r="1.6" fill="#efe9f2"/>
+<use href="#heart" x="42" y="118" width="16" height="14.4" fill="var(--logo,#ef6a8f)"/>
+<circle cx="16" cy="64" r="6.5" fill="#f7d2b8" stroke="#e3ad90" stroke-width="1.2"/><circle cx="84" cy="64" r="6.5" fill="#f7d2b8" stroke="#e3ad90" stroke-width="1.2"/>
+<use href="#star" x="12" y="68" width="7" height="7" fill="#e8f1ff"/>
+<path d="M16 58c0-22 15-37 34-37s34 15 34 37c0 21-15 35-34 35S16 79 16 58z" fill="url(#faceB)" stroke="#e3ad90" stroke-width="1.3"/>
+<path d="M17 62c-2-9-1-17 2-24l6 4c-2 6-3 13-2 20zM83 62c2-9 1-17-2-24l-6 4c2 6 3 13 2 20z" fill="#8f7c76" opacity=".55"/>
+<g fill="url(#hairB)" stroke="#1d1514" stroke-width="1"><circle cx="25" cy="41" r="9"/><circle cx="33" cy="32" r="10"/><circle cx="44" cy="27" r="10.5"/><circle cx="56" cy="27" r="10.5"/><circle cx="67" cy="32" r="10"/><circle cx="75" cy="41" r="9"/><path d="M19 46c4-16 58-18 62 0-6 4-12 2-19 0-8-2-16-2-24 0-6 2-13 4-19 0z"/></g>
+<g stroke="#6b5652" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".9"><path d="M38 22q5-3 10 0M52 22q5-3 10 0M28 31q4-4 9-3M64 29q5-1 8 3M32 41q6-4 12-2M52 39q6-3 12 0"/></g>
+<path d="M28 49q7-5 14-1M58 48q7-4 14 1" stroke="#2a201f" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+<ellipse cx="36" cy="62" rx="6.8" ry="8.2" fill="url(#eyeV)"/><circle cx="36" cy="63" r="3" fill="#15130f"/><circle cx="38.4" cy="58.8" r="2.7" fill="#fff"/><circle cx="33.6" cy="65.6" r="1.2" fill="#fff"/>
+<ellipse cx="64" cy="62" rx="6.8" ry="8.2" fill="url(#eyeV)"/><circle cx="64" cy="63" r="3" fill="#15130f"/><circle cx="66.4" cy="58.8" r="2.7" fill="#fff"/><circle cx="61.6" cy="65.6" r="1.2" fill="#fff"/>
+<ellipse cx="26" cy="77" rx="8" ry="5" fill="url(#cheek)" opacity=".75"/><ellipse cx="74" cy="77" rx="8" ry="5" fill="url(#cheek)" opacity=".75"/>
+<path d="M50 69.5q1.4 2-.4 3.2" stroke="#d99d82" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+<path d="M44 78.5q6 5 12 0" stroke="#a84a52" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="yumsym" viewBox="0 0 120 100">
+<path d="M98 70c18-4 20-26 10-34" stroke="#3a3a3f" stroke-width="9" fill="none" stroke-linecap="round"/>
+<ellipse cx="70" cy="72" rx="34" ry="22" fill="#fff" stroke="#e6dde3" stroke-width="2"/>
+<path d="M78 54c10 0 18 6 20 14-10-2-18-6-20-14z" fill="#2d2d33"/>
+<ellipse cx="52" cy="90" rx="8" ry="5" fill="#fff" stroke="#e6dde3"/><ellipse cx="84" cy="90" rx="8" ry="5" fill="#fff" stroke="#e6dde3"/>
+<path d="M18 30 22 6l16 14zM58 30 54 6 38 20z" fill="#2d2d33"/><path d="M22 24 24 12l8 7zM54 24l-2-12-8 7z" fill="#f5b6c8"/>
+<circle cx="38" cy="42" r="23" fill="#fff" stroke="#e6dde3" stroke-width="2"/>
+<path d="M17 36c2-12 12-20 24-19 9 1 16 7 19 15-8-6-16-6-22-2-7-4-14-2-21 6z" fill="#2d2d33"/>
+<ellipse cx="30" cy="42" rx="4" ry="5" fill="#b9c55a"/><ellipse cx="46" cy="42" rx="4" ry="5" fill="#b9c55a"/>
+<ellipse cx="30" cy="43" rx="1.5" ry="3.6" fill="#1d1a17"/><ellipse cx="46" cy="43" rx="1.5" ry="3.6" fill="#1d1a17"/>
+<path d="M35 50h6l-3 3z" fill="#f09bb4"/><path d="M38 53q-3 4-6 2M38 53q3 4 6 2" stroke="#9a7b85" stroke-width="1.3" fill="none"/>
+<path d="M27 51 10 48M27 54 11 57M49 51l17-3M49 54l16 3" stroke="#b9aeb5" stroke-width="1"/>
+</symbol>
+<symbol id="kid" viewBox="0 0 40 70">
+<path d="M10 40q10-5 20 0l3 20H7z" fill="var(--c,#5ab0e8)"/>
+<rect x="12" y="58" width="6" height="9" rx="3" fill="#3b3443"/><rect x="22" y="58" width="6" height="9" rx="3" fill="#3b3443"/>
+<circle cx="20" cy="22" r="16" fill="var(--sk,#fbdcc6)" stroke="#e7b496" stroke-width="1"/>
+<path d="M4 22C3 10 11 4 20 4s17 6 16 18c-3-7-9-10-16-10S7 15 4 22z" fill="var(--hr,#3a2620)"/>
+<ellipse cx="14.5" cy="24" rx="2.6" ry="3.2" fill="#2b1a17"/><circle cx="15.4" cy="22.8" r="1" fill="#fff"/>
+<ellipse cx="25.5" cy="24" rx="2.6" ry="3.2" fill="#2b1a17"/><circle cx="26.4" cy="22.8" r="1" fill="#fff"/>
+<ellipse cx="10" cy="29" rx="3.5" ry="2.2" fill="#ff9fb8" opacity=".6"/><ellipse cx="30" cy="29" rx="3.5" ry="2.2" fill="#ff9fb8" opacity=".6"/>
+<path d="M17 30q3 3 6 0" stroke="#b83f66" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="trophy" viewBox="0 0 40 56">
+<path d="M8 4h24v12c0 10-6 17-12 17S8 26 8 16z" fill="#e7b43c"/>
+<path d="M8 8H2c0 10 4 14 9 15M32 8h6c0 10-4 14-9 15" stroke="#e7b43c" stroke-width="3" fill="none"/>
+<path d="M14 6v12c0 6 3 10 6 11" stroke="#fff1b8" stroke-width="2.4" fill="none" opacity=".8"/>
+<rect x="17" y="33" width="6" height="9" fill="#c9962b"/><rect x="9" y="42" width="22" height="10" rx="2" fill="#3b1830"/>
+</symbol>
+<symbol id="note" viewBox="0 0 20 26"><path d="M7 20V3l12-3v17" stroke="currentColor" stroke-width="2.4" fill="none"/><ellipse cx="4.5" cy="20.5" rx="4.5" ry="3.5" fill="currentColor"/><ellipse cx="16.5" cy="17.5" rx="4.5" ry="3.5" fill="currentColor"/></symbol>
+</defs>
+</svg>
+
+<div class="stage">
+<div class="book" id="book">
+
+<!-- 1 portada -->
+<section class="page on">
+<div class="art" style="height:clamp(230px,54%,430px)">
+<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="300" fill="url(#night)"/>
+<path d="M0 0h80c-10 60-20 140-80 220zM400 0h-80c10 60 20 140 80 220z" fill="#e07aa2"/>
+<path d="M0 0h50c-6 60-16 120-50 170zM400 0h-50c6 60 16 120 50 170z" fill="#f4a9c4"/>
+<path d="M0 0h400v24c-30 10-50 10-66 0-16 10-36 10-52 0-16 10-36 10-52 0-16 10-36 10-52 0-16 10-36 10-52 0-16 10-36 10-52 0-16 10-34 10-74 0z" fill="#f7b6cc"/>
+<path d="M140 30 90 300h220L260 30z" fill="url(#spot)"/>
+<ellipse cx="200" cy="292" rx="210" ry="40" fill="#8a4a7a"/>
+<ellipse cx="200" cy="280" rx="120" ry="16" fill="#fff6c9" opacity=".25"/>
+<use href="#yu" x="196" y="104" width="104" height="180" class="sway"/>
+<use href="#be" x="100" y="100" width="104" height="184" class="sway2"/>
+<g fill="#ff8fb6"><use href="#heart" x="194" y="110" width="18" height="16" class="fl"/><use href="#heart" x="60" y="60" width="16" height="14" class="fl d1"/><use href="#heart" x="320" y="80" width="20" height="18" class="fl d2"/></g>
+<g fill="#ffe08a"><use href="#star" x="110" y="50" width="12" height="12" class="tw"/><use href="#star" x="290" y="44" width="10" height="10" class="tw d1"/><use href="#star" x="352" y="150" width="9" height="9" class="tw d2"/><use href="#star" x="40" y="140" width="10" height="10" class="tw"/></g>
+</svg>
+</div>
+<div class="body" style="text-align:center;padding-top:20px">
+<h1>El cuento de Yubita</h1>
+<p class="hand" style="font-size:26px;margin-bottom:10px">Un libro escrito solo para ti,<br>en tu cumpleaños</p>
+<p style="color:var(--soft);font-size:15px">Toca la flecha para dar vuelta la página. En algunas páginas hay cosas escondidas: toca los dibujos.</p>
+</div>
+</section>
+
+<!-- 2 había una vez -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="url(#sky)"/>
+<circle cx="330" cy="54" r="34" fill="#ffd27a" opacity=".7"/>
+<path d="M0 200c80-30 160-30 240-10s120 10 160-6v56H0z" fill="#f7b6cc"/>
+<path d="M0 222c100-20 220-20 400-4v22H0z" fill="#ef8fb0"/>
+<use href="#yu" x="148" y="52" width="104" height="180" class="sway"/>
+<g fill="#ec5f93"><use href="#heart" x="90" y="70" width="22" height="20" class="fl"/><use href="#heart" x="282" y="120" width="16" height="14" class="fl d1"/></g>
+<g fill="url(#leo)" stroke="#e0457b" stroke-width=".8"><use href="#heart" x="60" y="130" width="28" height="25" class="fl d2"/><use href="#heart" x="300" y="66" width="24" height="22" class="fl"/></g>
+<g fill="#ffd27a"><use href="#star" x="128" y="40" width="10" height="10" class="tw"/><use href="#star" x="256" y="36" width="12" height="12" class="tw d1"/></g>
+</svg>
+</div>
+<div class="body">
+<h2>Había una vez…</h2>
+<p>…una niña llamada Ljubitza, aunque casi todos la conocían como <b>Yubita</b>.</p>
+<p>Tenía unos lentes enormes que le quedaban preciosos, una sonrisa medio pícara y una debilidad por dos cosas: todo lo que fuera rosado y todo lo que tuviera manchitas de leopardo.</p>
+<div class="pols"><figure class="pol big" style="--r:2deg"><img src="img/yubi.jpg" alt="Yubita sonriendo con sus lentes rosados"><figcaption>La protagonista</figcaption></figure></div>
+</div>
+<span class="num">1</span>
+</section>
+
+<!-- 3 frasco -->
+<section class="page">
+<div class="art tap" id="jar" aria-label="Toca el frasco para sacar una razón">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="url(#sky)"/>
+<path d="M0 206c90-14 310-14 400 0v34H0z" fill="#f7b6cc"/>
+<ellipse cx="200" cy="214" rx="70" ry="9" fill="#e79ab8" opacity=".6"/>
+<g id="jarBody" style="transform-box:fill-box;transform-origin:50% 100%">
+<path d="M146 84h108v8c12 6 16 16 16 30v76c0 10-8 16-18 16H148c-10 0-18-6-18-16v-76c0-14 4-24 16-30z" fill="#fff" fill-opacity=".55" stroke="#e79ab8" stroke-width="3"/>
+<clipPath id="jc"><path d="M150 96h100c10 6 14 14 14 26v76c0 6-5 10-12 10H148c-7 0-12-4-12-10v-76c0-12 4-20 14-26z"/></clipPath>
+<g clip-path="url(#jc)"><use href="#heart" x="137" y="197" width="19" height="17" fill="#f7b6cc" transform="rotate(25 146.5 206.5)"/><use href="#heart" x="154" y="197" width="17" height="15" fill="#ff86ab" transform="rotate(-2 162.5 205.5)"/><use href="#heart" x="180" y="194" width="20" height="18" fill="#c93c6f" transform="rotate(25 190.0 204.0)"/><use href="#heart" x="199" y="199" width="24" height="22" fill="#ff86ab" transform="rotate(-16 211.0 211.0)"/><use href="#heart" x="213" y="198" width="19" height="17" fill="#d9668f" transform="rotate(14 222.5 207.5)"/><use href="#heart" x="229" y="198" width="18" height="16" fill="#f48fb1" transform="rotate(-30 238.0 207.0)"/><use href="#heart" x="146" y="184" width="17" height="15" fill="#f7b6cc" transform="rotate(25 154.5 192.5)"/><use href="#heart" x="167" y="183" width="23" height="21" fill="#ff86ab" transform="rotate(21 178.5 194.5)"/><use href="#heart" x="182" y="180" width="18" height="16" fill="#e0457b" transform="rotate(-18 191.0 189.0)"/><use href="#heart" x="206" y="179" width="21" height="19" fill="#c93c6f" transform="rotate(20 216.5 189.5)"/><use href="#heart" x="222" y="181" width="23" height="21" fill="#d9668f" transform="rotate(9 233.5 192.5)"/><use href="#heart" x="245" y="182" width="23" height="21" fill="#d9668f" transform="rotate(-6 256.5 193.5)"/><use href="#heart" x="139" y="168" width="17" height="15" fill="#f7b6cc" transform="rotate(-15 147.5 176.5)"/><use href="#heart" x="158" y="167" width="18" height="16" fill="#c93c6f" transform="rotate(-8 167.0 176.0)"/><use href="#heart" x="176" y="165" width="18" height="16" fill="#e0457b" transform="rotate(26 185.0 174.0)"/><use href="#heart" x="198" y="163" width="22" height="20" fill="#e0457b" transform="rotate(17 209.0 174.0)"/><use href="#heart" x="212" y="163" width="21" height="19" fill="#ff86ab" transform="rotate(18 222.5 173.5)"/><use href="#heart" x="230" y="163" width="17" height="15" fill="#ff86ab" transform="rotate(7 238.5 171.5)"/><use href="#heart" x="150" y="150" width="20" height="18" fill="#e0457b" transform="rotate(4 160.0 160.0)"/><use href="#heart" x="161" y="148" width="18" height="16" fill="#d9668f" transform="rotate(33 170.0 157.0)"/><use href="#heart" x="180" y="149" width="23" height="21" fill="#f7b6cc" transform="rotate(-2 191.5 160.5)"/><use href="#heart" x="201" y="153" width="17" height="15" fill="#f7b6cc" transform="rotate(5 209.5 161.5)"/><use href="#heart" x="223" y="149" width="23" height="21" fill="#ff86ab" transform="rotate(23 234.5 160.5)"/><use href="#heart" x="245" y="151" width="18" height="16" fill="#d9668f" transform="rotate(29 254.0 160.0)"/><use href="#heart" x="138" y="136" width="20" height="18" fill="#f7b6cc" transform="rotate(20 148.0 146.0)"/><use href="#heart" x="157" y="137" width="21" height="19" fill="#d9668f" transform="rotate(8 167.5 147.5)"/><use href="#heart" x="172" y="139" width="23" height="21" fill="#d9668f" transform="rotate(5 183.5 150.5)"/><use href="#heart" x="191" y="136" width="19" height="17" fill="#e0457b" transform="rotate(7 200.5 145.5)"/><use href="#heart" x="217" y="135" width="22" height="20" fill="#d9668f" transform="rotate(0 228.0 146.0)"/><use href="#heart" x="236" y="133" width="17" height="15" fill="#c93c6f" transform="rotate(-33 244.5 141.5)"/><use href="#heart" x="147" y="120" width="24" height="22" fill="#f7b6cc" transform="rotate(5 159.0 132.0)"/><use href="#heart" x="163" y="120" width="19" height="17" fill="#f7b6cc" transform="rotate(12 172.5 129.5)"/><use href="#heart" x="184" y="120" width="23" height="21" fill="#e0457b" transform="rotate(-32 195.5 131.5)"/><use href="#heart" x="201" y="120" width="20" height="18" fill="#c93c6f" transform="rotate(-1 211.0 130.0)"/><use href="#heart" x="221" y="120" width="19" height="17" fill="#c93c6f" transform="rotate(20 230.5 129.5)"/><use href="#heart" x="238" y="118" width="22" height="20" fill="#f7b6cc" transform="rotate(-7 249.0 129.0)"/><use href="#heart" x="141" y="109" width="19" height="17" fill="#e0457b" transform="rotate(8 150.5 118.5)"/><use href="#heart" x="156" y="107" width="24" height="22" fill="#f7b6cc" transform="rotate(-7 168.0 119.0)"/><use href="#heart" x="173" y="103" width="20" height="18" fill="#f7b6cc" transform="rotate(-12 183.0 113.0)"/><use href="#heart" x="195" y="105" width="18" height="16" fill="#d9668f" transform="rotate(9 204.0 114.0)"/><use href="#heart" x="212" y="106" width="21" height="19" fill="#d9668f" transform="rotate(-1 222.5 116.5)"/><use href="#heart" x="236" y="105" width="23" height="21" fill="#f7b6cc" transform="rotate(18 247.5 116.5)"/></g>
+<path d="M150 104c-6 8-8 20-8 34" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none" opacity=".8"/>
+<rect x="140" y="66" width="120" height="22" rx="8" fill="#e0457b"/><rect x="140" y="66" width="120" height="22" rx="8" fill="url(#leo)" opacity=".3"/>
+<rect x="170" y="140" width="60" height="26" rx="5" fill="#fffafb" stroke="#e79ab8" stroke-width="1.5"/>
+<text x="200" y="158" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="18" fill="#5b2340">razones</text>
+</g>
+<g fill="#ec5f93"><use href="#heart" x="96" y="80" width="20" height="18" class="fl"/><use href="#heart" x="290" y="60" width="16" height="14" class="fl d1"/><use href="#heart" x="300" y="150" width="22" height="20" class="fl d2"/></g>
+<g fill="#ffd27a"><use href="#star" x="110" y="40" width="12" height="12" class="tw"/><use href="#star" x="276" y="30" width="10" height="10" class="tw d1"/></g>
+</svg>
+</div>
+<div class="body">
+<h2>Un frasco de razones</h2>
+<p>Este frasco está lleno de razones por las que te amo. Cada vez que lo toques, sale una.</p>
+<span class="tip">Toca el frasco</span>
+<div class="card" id="reason" style="min-height:96px;display:grid;align-content:center"><p class="hand" id="reasonText" style="margin:0;font-size:26px;color:var(--plum)">Hay muchas más de las que caben aquí…</p><p id="reasonCount" style="margin:4px 0 0;font-size:13px;color:var(--soft)"></p></div>
+</div>
+<span class="num">2</span>
+</section>
+
+<!-- 4 competencias -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="url(#night)"/>
+<path d="M0 0h70c-8 50-20 110-70 170zM400 0h-70c8 50 20 110 70 170z" fill="#e07aa2"/>
+<path d="M120 0 70 240h260L280 0z" fill="url(#spot)"/>
+<rect x="0" y="196" width="400" height="44" fill="#8a4a7a"/><rect x="0" y="196" width="400" height="5" fill="#e0457b"/>
+<use href="#be" x="96" y="40" width="96" height="166" style="--hood:#2f2a3a;--logo:#ef6a8f"/>
+<use href="#yu" x="206" y="42" width="96" height="164" style="--top:#5b3f7a;--topd:#3e2a57;--leo:.3;--col:#d9b3ff;--bow:#b07fe0"/>
+<g class="tap" id="trophies"><use href="#trophy" x="44" y="146" width="40" height="56"/><use href="#trophy" x="318" y="150" width="36" height="50"/></g>
+<g fill="#ffe08a"><use href="#star" x="160" y="24" width="12" height="12" class="tw"/><use href="#star" x="236" y="18" width="10" height="10" class="tw d1"/><use href="#star" x="350" y="40" width="10" height="10" class="tw d2"/></g>
+</svg>
+</div>
+<div class="body">
+<h2>Escenarios, nervios y maquillaje</h2>
+<p>Después vinieron los ensayos, los nervios antes de salir y los personajes más locos: él de Llanero Solitario con la cara pintada de blanco y negro, ella con cuernos de Maléfica y hasta de sombrerera loca con ojos de colores.</p>
+<p>En el Best Regional 2026 él salió campeón y ella segundo lugar… y lo celebraron con un beso frente a todo el mundo.</p>
+<span class="tip">Toca los trofeos</span>
+<div class="pols">
+<figure class="pol" style="--r:3deg"><img src="img/medallas.jpg" alt="Los dos con poleras rojas y medallas"><figcaption>Las primeras medallas</figcaption></figure>
+<figure class="pol" style="--r:-4deg"><img src="img/best.jpg" alt="Beso con los trofeos del Best Regional"><figcaption>Best Regional 2026</figcaption></figure>
+<figure class="pol" style="--r:3deg"><img src="img/patagonia.jpg" alt="Beso en el Classic Patagonia"><figcaption>Classic Patagonia</figcaption></figure>
+<figure class="pol" style="--r:-2deg"><img src="img/malefica.jpg" alt="Ella de Maléfica con él"><figcaption>Mi Maléfica</figcaption></figure>
+<figure class="pol" style="--r:4deg"><img src="img/payasita.jpg" alt="Ella maquillada de sombrerera loca"><figcaption>Mi sombrerera loca</figcaption></figure>
+<figure class="pol" style="--r:-3deg"><img src="img/taller.jpg" alt="Los dos con poleras rojas de la academia"><figcaption>El Taller</figcaption></figure>
+</div>
+</div>
+<span class="num">3</span>
+</section>
+
+<!-- 5 risas -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="#e3f4ef"/>
+<circle cx="70" cy="50" r="40" fill="#c7ebe0"/><circle cx="340" cy="40" r="26" fill="#c7ebe0"/>
+<path d="M0 200c90-18 300-18 400 0v40H0z" fill="#a8dccb"/>
+<use href="#be" x="104" y="42" width="98" height="170" class="sway2"/>
+<use href="#yu" x="198" y="44" width="98" height="168" class="sway"/>
+<g font-family="Baloo 2" font-weight="800" fill="#e0457b"><text x="74" y="82" font-size="24" class="fl">ja ja</text><text x="290" y="70" font-size="28" class="fl d1">jaja</text><text x="300" y="128" font-size="18" class="fl d2">jajaja</text></g>
+</svg>
+</div>
+<div class="body">
+<h2>Las risas</h2>
+<p>Pero lo mejor nunca fueron las medallas. Fueron las risas: las noches de mascarillas, las fotos más movidas del mundo y los viajes en bus con la cabeza en el hombro del otro.</p>
+<span class="tip">Toca una foto para verla grande</span>
+<div class="pols">
+<figure class="pol" style="--r:3deg"><img src="img/mascarillas.jpg" alt="Los dos con mascarillas faciales"><figcaption>Noche de spa</figcaption></figure>
+<figure class="pol" style="--r:-3deg"><img src="img/movida.jpg" alt="Selfie movida en el auto"><figcaption>La más movida (y feliz)</figcaption></figure>
+<figure class="pol" style="--r:2deg"><img src="img/bus.jpg" alt="Selfie en el bus"><figcaption>De viaje</figcaption></figure>
+<figure class="pol" style="--r:-2deg"><img src="img/tribal.jpg" alt="Él maquillado dándole un beso en la mejilla"><figcaption>Besito del Llanero Solitario</figcaption></figure>
+<figure class="pol" style="--r:4deg"><img src="img/cama.jpg" alt="Selfie abrazados al aire libre"><figcaption>Así, siempre</figcaption></figure>
+<figure class="pol" style="--r:-4deg"><img src="img/rosada.jpg" alt="Selfie de los dos en la casa"><figcaption>Nosotros</figcaption></figure>
+</div>
+</div>
+<span class="num">4</span>
+</section>
+
+<!-- 6 yummito -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="#eaf6d9"/>
+<rect x="40" y="30" width="90" height="70" rx="6" fill="#fff" stroke="#cfe3b2" stroke-width="4"/><path d="M85 30v70M40 65h90" stroke="#cfe3b2" stroke-width="4"/>
+<path d="M0 196h400v44H0z" fill="#c9a6d8"/><path d="M0 196h400" stroke="#a983bd" stroke-width="3"/>
+<use href="#yu" x="214" y="34" width="100" height="174" style="--top:#b9a2e0;--topd:#8f74c0;--leo:.2"/>
+<g class="tap" id="cat"><use href="#yumsym" x="70" y="104" width="140" height="116"/></g>
+<g fill="#ec5f93"><use href="#heart" x="180" y="80" width="18" height="16" class="fl"/><use href="#heart" x="330" y="60" width="14" height="12" class="fl d1"/></g>
+</svg>
+</div>
+<div class="body">
+<h2>Y llegó Yummito</h2>
+<p>Un día Yubita llegó a la casa con una sorpresa para toda la familia: Yummito, un gatito blanco con manchas negras.</p>
+<p>Desde entonces la casa tiene más risas, más pelos en el sillón y mucho más cariño. Y él todavía piensa que los brazos de Yubita son el mejor lugar del mundo.</p>
+<p class="hand">Gracias por traerlo, Yubita. La familia entera te lo agradece.</p>
+<span class="tip">Toca a Yummito</span>
+<div class="pols">
+<figure class="pol" style="--r:-3deg"><img src="img/yummi1.jpg" alt="Yubita abrazando a Yummito"><figcaption>El regalo para la familia</figcaption></figure>
+<figure class="pol" style="--r:3deg"><img src="img/yummi2.jpg" alt="Yubita con Yummito en brazos"><figcaption>Su lugar favorito</figcaption></figure>
+</div>
+</div>
+<span class="num">5</span>
+</section>
+
+<!-- 7 tía -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="#fff4d6"/>
+<g fill="#f7b6cc"><circle cx="40" cy="26" r="9"/><circle cx="360" cy="26" r="9"/></g>
+<path d="M40 26q80 26 160 0t160 0" stroke="#e0457b" stroke-width="2" fill="none"/>
+<g><path d="M70 30l10 16 10-16z" fill="#ffd27a"/><path d="M120 36l10 16 10-16z" fill="#8fd3c1"/><path d="M170 30l10 16 10-16z" fill="#f7b6cc"/><path d="M220 30l10 16 10-16z" fill="#a8c8f0"/><path d="M270 36l10 16 10-16z" fill="#ffd27a"/><path d="M320 30l10 16 10-16z" fill="#8fd3c1"/></g>
+<path d="M0 196h400v44H0z" fill="#9fd4a6"/><path d="M0 196h400" stroke="#7bbb84" stroke-width="3"/>
+<use href="#yu" x="150" y="36" width="100" height="174" style="--top:#2f7a57;--topd:#1f5b3f;--leo:0;--col:#fff;--bow:#2f7a57"/>
+<g id="kids" class="tap">
+<use href="#kid" x="78" y="150" width="34" height="60" style="--c:#f6a43b"/>
+<use href="#kid" x="114" y="156" width="30" height="54" style="--c:#5ab0e8;--hr:#a0663a"/>
+<use href="#kid" x="256" y="152" width="32" height="58" style="--c:#e0457b;--hr:#2a1f1e"/>
+<use href="#kid" x="290" y="148" width="34" height="62" style="--c:#7bc47f;--sk:#d9a47e"/>
+</g>
+</svg>
+</div>
+<div class="body">
+<h2>La tía Yubita</h2>
+<p>Cuando Yubita se pone su delantal verde se convierte en la tía Yubita.</p>
+<p>Los niños que pasan por sus manos quizás no lo saben todavía, pero les toca la tía más paciente y cariñosa de todo Magallanes.</p>
+<span class="tip">Toca a los niños</span>
+<div class="pols"><figure class="pol big" style="--r:2deg"><img src="img/tia.jpg" alt="Yubita con su delantal verde de educadora"><figcaption>Tía Ljubitza</figcaption></figure></div>
+</div>
+<span class="num">6</span>
+</section>
+
+<!-- 8 flores y anillo -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="url(#sky)"/>
+<path d="M0 150l60-40 50 30 70-56 80 52 60-34 80 44v94H0z" fill="#c8b8de"/>
+<path d="M0 176c100-10 300-10 400 0v64H0z" fill="#9fd4a6"/>
+<use href="#be" x="104" y="44" width="98" height="170"/>
+<use href="#yu" x="200" y="46" width="98" height="168" style="--top:#7d8a52;--topd:#5d6b3a;--leo:.2"/>
+<g transform="translate(176 140)"><path d="M0 20 14 52 28 20z" fill="#fbd4e1" stroke="#f0a8c0"/><circle cx="8" cy="14" r="7" fill="#f6c440"/><circle cx="8" cy="14" r="3" fill="#7a4a1e"/><path d="M16 8c6-8 14-2 10 6-4 4-10 2-10-6z" fill="#f59ac0"/><g fill="#fff"><circle cx="22" cy="20" r="1.6"/><circle cx="4" cy="4" r="1.6"/><circle cx="26" cy="6" r="1.6"/></g></g>
+<g fill="#ffe08a"><use href="#star" x="268" y="132" width="12" height="12" class="tw"/><use href="#star" x="282" y="120" width="8" height="8" class="tw d1"/></g>
+<g fill="#ec5f93"><use href="#heart" x="190" y="40" width="22" height="20" class="fl"/></g>
+</svg>
+</div>
+<div class="body">
+<h2>Flores y un anillo</h2>
+<p>Hubo flores, paseos mirando el mar y un anillo que brilla cada vez que ella mueve la mano.</p>
+<p>Porque esta no es una de esas historias que se terminan.</p>
+<div class="pols">
+<figure class="pol" style="--r:-3deg"><img src="img/flores.jpg" alt="Selfie en el espejo con un ramo de flores"><figcaption>Flores para ti</figcaption></figure>
+<figure class="pol" style="--r:3deg"><img src="img/anillo.jpg" alt="La mano de Yubita con su anillo"><figcaption>El anillo</figcaption></figure>
+<figure class="pol" style="--r:-2deg"><img src="img/pa.jpg" alt="Selfie con el mar y los cerros de fondo"><figcaption>Mirando el mar</figcaption></figure>
+</div>
+</div>
+<span class="num">7</span>
+</section>
+
+<!-- 9 vales -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMax slice">
+<rect width="400" height="240" fill="#fde6ee"/>
+<g fill="#f7b6cc"><use href="#heart" x="40" y="40" width="30" height="27" class="fl"/><use href="#heart" x="330" y="120" width="34" height="30" class="fl d1"/></g>
+<g fill="#ffd27a"><use href="#star" x="96" y="120" width="12" height="12" class="tw"/><use href="#star" x="300" y="40" width="14" height="14" class="tw d1"/><use href="#star" x="340" y="70" width="9" height="9" class="tw d2"/></g>
+<ellipse cx="200" cy="222" rx="96" ry="10" fill="#e79ab8" opacity=".6"/>
+<rect x="124" y="122" width="152" height="98" rx="8" fill="#e0457b"/><rect x="124" y="122" width="152" height="98" rx="8" fill="url(#leo)" opacity=".28"/>
+<rect x="114" y="98" width="172" height="32" rx="8" fill="#f06b9b"/>
+<rect x="190" y="98" width="20" height="122" fill="#ffd27a"/><rect x="114" y="108" width="172" height="12" fill="#ffd27a" opacity="0"/>
+<path d="M200 98c-18-34-58-26-46-6 8 12 30 8 46 6zM200 98c18-34 58-26 46-6-8 12-30 8-46 6z" fill="#ffd27a" stroke="#d9a441" stroke-width="2"/>
+<circle cx="200" cy="96" r="9" fill="#f0b93a"/>
+<g transform="translate(232 58) rotate(14)"><rect width="74" height="40" rx="6" fill="#fff" stroke="#f0a3be" stroke-width="2" stroke-dasharray="5 4"/><text x="37" y="26" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="20" fill="#e0457b">vale por…</text></g>
+</svg>
+</div>
+<div class="body">
+<h2>Vales de regalo</h2>
+<p>Raspa cada tarjeta con el dedo para descubrir tu regalo. Los puedes canjear cuando quieras.</p>
+<div class="vales" id="vales">
+<div class="vale"><b>Una cita sorpresa</b><small>yo organizo todo</small><canvas></canvas></div>
+<div class="vale"><b>Desayuno en la cama</b><small>con todo lo que te gusta</small><canvas></canvas></div>
+<div class="vale"><b>Tú eliges la película</b><small>sin reclamos</small><canvas></canvas></div>
+<div class="vale"><b>Un día entero de mimos</b><small>abrazos ilimitados</small><canvas></canvas></div>
+<div class="vale"><b>Una salida a comer</b><small>donde tú quieras</small><canvas></canvas></div>
+<div class="vale"><b>Un masaje relajante</b><small>de verdad, no de 2 minutos</small><canvas></canvas></div>
+</div>
+<p class="hand" id="valesMsg" style="margin-top:12px;text-align:center"></p>
+<p style="font-size:13px;color:var(--soft);text-align:center;margin:0">Canjeables con Benja · sin fecha de vencimiento</p>
+</div>
+<span class="num">8</span>
+</section>
+
+<!-- 10 secreto -->
+<section class="page">
+<div class="art">
+<svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" id="lock">
+<rect width="400" height="240" fill="#fde6ee"/>
+<g fill="#f7b6cc"><use href="#heart" x="40" y="40" width="40" height="36" class="fl"/><use href="#heart" x="320" y="150" width="46" height="41" class="fl d1"/><use href="#heart" x="330" y="30" width="24" height="22" class="fl d2"/></g>
+<path class="shackle" d="M172 108V82a28 28 0 0 1 56 0v26" stroke="#c9962b" stroke-width="14" fill="none"/>
+<use href="#heart" x="150" y="98" width="100" height="90" fill="#e0457b"/>
+<circle cx="200" cy="132" r="8" fill="#5b2340"/><rect x="196" y="134" width="8" height="18" rx="3" fill="#5b2340"/>
+</svg>
+</div>
+<div class="body">
+<h2>Un candado con corazón</h2>
+<p>Para llegar al final del cuento tienes que abrir este candado.</p>
+<label for="secret">¿En qué año nos conocimos bailando?</label>
+<input type="text" id="secret" inputmode="numeric" placeholder="Escribe el año" autocomplete="off">
+<button class="btn" id="tryLock">Abrir</button>
+<div class="msg" id="lockMsg"></div>
+</div>
+<span class="num">9</span>
+</section>
+
+<!-- 11 torta -->
+<section class="page">
+<div class="art" style="height:clamp(220px,50%,380px)">
+<svg viewBox="0 0 400 280" preserveAspectRatio="xMidYMax slice" id="cakeSvg">
+<rect width="400" height="280" fill="url(#night)"/>
+<g fill="#ffe08a"><use href="#star" x="50" y="40" width="12" height="12" class="tw"/><use href="#star" x="330" y="30" width="14" height="14" class="tw d1"/><use href="#star" x="360" y="120" width="10" height="10" class="tw d2"/><use href="#star" x="30" y="150" width="10" height="10" class="tw"/></g>
+<ellipse cx="200" cy="256" rx="150" ry="20" fill="#8a4a7a"/>
+<rect x="90" y="190" width="220" height="62" rx="12" fill="#f7b6cc"/>
+<rect x="90" y="190" width="220" height="62" rx="12" fill="url(#leo)" opacity=".3"/>
+<path d="M90 204c20 14 30-6 44 6s28-8 44 4 28-8 44 2 28-8 44 2 24-6 44 0v-14H90z" fill="#fff"/>
+<rect x="118" y="140" width="164" height="56" rx="10" fill="#e0457b"/>
+<path d="M118 152c16 12 26-4 38 6s26-6 38 4 26-6 38 2 26-6 38 0v-12H118z" fill="#fff"/>
+<g id="candles">
+<g class="candle"><rect x="138" y="100" width="12" height="42" rx="3" fill="#fff" stroke="#f7b6cc" stroke-width="2"/><path class="flame" d="M144 80c7 8 7 16 0 18-7-2-7-10 0-18z" fill="#ffb02e"/><circle class="smoke" cx="144" cy="84" r="6" fill="#ddd"/></g>
+<g class="candle"><rect x="170" y="94" width="12" height="48" rx="3" fill="#fff" stroke="#f7b6cc" stroke-width="2"/><path class="flame" d="M176 74c7 8 7 16 0 18-7-2-7-10 0-18z" fill="#ffb02e"/><circle class="smoke" cx="176" cy="78" r="6" fill="#ddd"/></g>
+<g class="candle"><rect x="202" y="90" width="12" height="52" rx="3" fill="#fff" stroke="#f7b6cc" stroke-width="2"/><path class="flame" d="M208 70c7 8 7 16 0 18-7-2-7-10 0-18z" fill="#ffb02e"/><circle class="smoke" cx="208" cy="74" r="6" fill="#ddd"/></g>
+<g class="candle"><rect x="234" y="94" width="12" height="48" rx="3" fill="#fff" stroke="#f7b6cc" stroke-width="2"/><path class="flame" d="M240 74c7 8 7 16 0 18-7-2-7-10 0-18z" fill="#ffb02e"/><circle class="smoke" cx="240" cy="78" r="6" fill="#ddd"/></g>
+<g class="candle"><rect x="266" y="100" width="12" height="42" rx="3" fill="#fff" stroke="#f7b6cc" stroke-width="2"/><path class="flame" d="M272 80c7 8 7 16 0 18-7-2-7-10 0-18z" fill="#ffb02e"/><circle class="smoke" cx="272" cy="84" r="6" fill="#ddd"/></g>
+</g>
+</svg>
+</div>
+<div class="body" style="text-align:center">
+<h2 id="cakeTitle">Pide un deseo…</h2>
+<p id="cakeText">…y apaga las velas soplando al micrófono del celular, o tocándolas con el dedo.</p>
+<button class="btn" id="micBtn">Soplar las velas</button>
+<p class="msg" id="micMsg"></p>
+<button class="btn" id="toLetter" hidden>Abrir tu carta</button>
+</div>
+<span class="num">10</span>
+</section>
+
+<!-- 12 carta -->
+<section class="page" id="letterPage">
+<div class="body" style="padding-top:24px">
+<h2 style="text-align:center">Para ti</h2>
+<div class="letter" id="letter">
+<p>Yubita:</p>
+<p>Feliz cumpleaños, mi amor. Quería regalarte algo que no se pudiera comprar en ninguna tienda, así que te hice un libro con nuestra historia, desde que nos conocimos bailando en 2022 hasta hoy.</p>
+<p>Gracias por cada ensayo, cada competencia, cada maquillaje imposible y cada medalla que celebramos juntos. Gracias por las risas, por las noches de mascarillas, por las fotos movidas y por hacer que cualquier viaje se sienta como una aventura.</p>
+<p>Gracias por traer a Yummito a la casa; ahora es parte de la familia gracias a ti. Me encanta verte ser la tía Yubita, porque los niños tienen la suerte de tener a alguien con tu paciencia y tu cariño. Y me encanta imaginar todo lo que viene, incluso, algún día, un hijo o una hija que baile igual que tú.</p>
+<p>Este cuento no se termina aquí. Recién vamos en el primer capítulo.</p>
+<p>Te amo.</p>
+<p class="sig">Tu Benja</p>
+</div>
+<div class="pols" style="margin-top:18px"><figure class="pol big" style="--r:-2deg"><img src="img/cama.jpg" alt="Selfie de los dos abrazados"><figcaption>Fin… o mejor dicho, continuará</figcaption></figure></div>
+</div>
+</section>
+
+<div class="lb" id="lb" role="dialog" aria-label="Foto ampliada"><figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure></div>
+<canvas id="fx"></canvas>
+</div>
+<nav class="nav" aria-label="Páginas">
+<button class="prev" id="prev" aria-label="Página anterior">‹</button>
+<div class="dots" id="dots"></div>
+<button id="next" aria-label="Página siguiente">›</button>
+</nav>
+</div>
+
+<script>
+{
+const book=document.getElementById('book');
+const pages=[...book.querySelectorAll('.page')];
+const dots=document.getElementById('dots');
+const SECRET=9,CAKE=10;
+let cur=0,busy=false,unlocked=false,blown=false;
+
+dots.innerHTML=pages.map(()=>'<i></i>').join('');
+const paintDots=()=>[...dots.children].forEach((d,i)=>d.classList.toggle('on',i===cur));
+
+let ac=null;
+function audio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();}catch(e){ac=null}return ac}
+function tone(f,t0,d,type,vol){const a=audio();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,a.currentTime+t0);g.gain.linearRampToValueAtTime(vol||.15,a.currentTime+t0+.02);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);o.connect(g).connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.05)}
+let noiseBuf=null;
+function noise(a){if(noiseBuf)return noiseBuf;const len=a.sampleRate*.8;noiseBuf=a.createBuffer(1,len,a.sampleRate);const d=noiseBuf.getChannelData(0);let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+.06*w)/1.06;d[i]=w*.55+last*3}return noiseBuf}
+function rustle(t0,dur,f1,f2,vol){const a=audio();if(!a)return;const s=a.createBufferSource();s.buffer=noise(a);const bp=a.createBiquadFilter();bp.type='bandpass';bp.Q.value=.9;const t=a.currentTime+t0;bp.frequency.setValueAtTime(f1,t);bp.frequency.exponentialRampToValueAtTime(f2,t+dur);const g=a.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+dur*.35);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(bp).connect(g).connect(a.destination);s.start(t,Math.random()*.2);s.stop(t+dur+.05)}
+const chime=()=>{rustle(0,.12,2500,4200,.10);rustle(.05,.42,1200,5200,.22);rustle(.38,.09,700,300,.18)};
+function melody(notes,step){let t=0;notes.forEach(([f,l])=>{if(f)tone(f,t,l*step*1.1,'triangle',.12);t+=l*step})}
+const N={C4:262,D4:294,E4:330,F4:349,G4:392,A4:440,Bb4:466,C5:523,D5:587,E5:659,F5:698,G5:784};
+const birthday=[[N.G4,.75],[N.G4,.25],[N.A4,1],[N.G4,1],[N.C5,1],[N.B4||494,2],[N.G4,.75],[N.G4,.25],[N.A4,1],[N.G4,1],[N.D5,1],[N.C5,2],[N.G4,.75],[N.G4,.25],[N.G5,1],[N.E5,1],[N.C5,1],[494,1],[N.A4,2],[N.F5,.75],[N.F5,.25],[N.E5,1],[N.C5,1],[N.D5,1],[N.C5,2]];
+const danceTune=[[N.E5,.5],[N.G5,.5],[N.E5,.5],[N.C5,.5],[N.D5,.5],[N.E5,.5],[N.C5,1],[N.A4,.5],[N.C5,.5],[N.D5,.5],[N.E5,1.5]];
+
+function go(n){
+  if(busy||n<0||n>=pages.length||n===cur)return;
+  if(n>cur&&cur===SECRET&&!unlocked){nudge(document.getElementById('secret'),'Primero abre el candado');return}
+  if(n>cur&&cur===CAKE&&!blown){nudge(document.getElementById('candles').closest('svg'),'Apaga las velas primero');return}
+  busy=true;chime();
+  const from=pages[cur],to=pages[n];
+  if(n>cur){
+    to.classList.add('on');from.classList.add('out');
+    setTimeout(()=>{from.classList.remove('on','out');busy=false},700);
+  }else{
+    from.classList.remove('on');to.classList.add('on','back');
+    setTimeout(()=>{to.classList.remove('back');busy=false},700);
+  }
+  cur=n;paintDots();
+  const b=to.querySelector('.body');if(b)b.scrollTop=0;
+  if(to.id==='letterPage'){const l=document.getElementById('letter');l.style.animation='none';l.offsetWidth;l.style.animation=''}
+}
+function nudge(el,txt){if(!el)return;el.classList.remove('shake');el.offsetWidth;el.classList.add('shake');bubble(txt,book,book.clientWidth/2-90,book.clientHeight*.3)}
+
+document.getElementById('next').addEventListener('click',()=>go(cur+1));
+document.getElementById('prev').addEventListener('click',()=>go(cur-1));
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+let sx=null,sy=null;
+book.addEventListener('touchstart',e=>{if(e.target.closest('input,button,#candles,.vale')){sx=null;return}sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+book.addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.4)go(cur+(dx<0?1:-1));sx=null},{passive:true});
+
+function bubble(txt,host,x,y){const s=document.createElement('span');s.className='bubble';s.textContent=txt;s.style.left=x+'px';s.style.top=y+'px';host.appendChild(s);setTimeout(()=>s.remove(),1400)}
+function bubbleAt(e,txt){const r=book.getBoundingClientRect();const x=(e.clientX||r.left+r.width/2)-r.left-30,y=(e.clientY||r.top+100)-r.top-50;bubble(txt,book,Math.max(8,Math.min(x,r.width-140)),Math.max(8,y))}
+
+const cv=document.getElementById('fx'),cx=cv.getContext('2d');let parts=[],raf=0;
+const COLS=['#e0457b','#f7b6cc','#ffd27a','#ffffff','#b66be0','#8fd3c1'];
+function confetti(n){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const dpr=window.devicePixelRatio||1;cv.width=book.clientWidth*dpr;cv.height=book.clientHeight*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+  const W=book.clientWidth;
+  for(let i=0;i<(n||140);i++)parts.push({x:W/2+(Math.random()-.5)*W*.5,y:book.clientHeight*.35,vx:(Math.random()-.5)*9,vy:-Math.random()*10-3,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:COLS[i%COLS.length],h:Math.random()<.25});
+  if(!raf)raf=requestAnimationFrame(tick);
+}
+function tick(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{p.vy+=.25;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;
+    if(p.h){cx.beginPath();const s=p.s*.6;cx.moveTo(0,s);cx.bezierCurveTo(-s*2,-s*.4,-s*.6,-s*1.8,0,-s*.6);cx.bezierCurveTo(s*.6,-s*1.8,s*2,-s*.4,0,s);cx.fill()}
+    else cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);cx.restore()});
+  parts=parts.filter(p=>p.y<book.clientHeight+30);
+  raf=parts.length?requestAnimationFrame(tick):0;
+  if(!raf)cx.clearRect(0,0,cv.width,cv.height);
+}
+
+const REASONS=["Porque contigo me siento en casa, estemos donde estemos.", "Porque somos equipo en todo, en lo bueno y en lo difícil.", "Porque me entiendes sin que tenga que decir nada.", "Porque tus abrazos arreglan cualquier día.", "Porque a tu lado hasta lo más simple se vuelve especial.", "Porque crecemos juntos, y cada día te vuelvo a elegir.", "Porque me das paz cuando todo está revuelto.", "Porque contigo puedo ser yo, sin miedo.", "Porque nos reímos de las mismas cosas.", "Porque cuidas lo nuestro con tanto cariño.", "Porque cuando estamos juntos el tiempo se pasa volando.", "Porque eres mi lugar seguro.", "Porque soñamos el mismo futuro.", "Porque cada día a tu lado me enamoro un poco más.", "Porque te elegiría una y mil veces."];let rOrder=REASONS.map((_,i)=>i).sort(()=>Math.random()-.5),rI=0;
+document.getElementById('jar').addEventListener('click',e=>{
+  const j=document.getElementById('jarBody');j.classList.remove('hop');j.getBoundingClientRect();j.classList.add('hop');
+  const r=REASONS[rOrder[rI%REASONS.length]];rI++;
+  const t=document.getElementById('reasonText');t.style.animation='none';t.offsetWidth;t.style.animation='unfold .5s ease-out';t.textContent=r;
+  document.getElementById('reasonCount').textContent='Razón '+(((rI-1)%REASONS.length)+1)+' de '+REASONS.length+(rI>=REASONS.length?' · y la lista sigue creciendo':'');
+  tone(1046,0,.12,'triangle',.07);tone(1318,.07,.18,'triangle',.06);bubbleAt(e,'♥');
+});
+
+document.getElementById('trophies').addEventListener('click',e=>{confetti(90);melody([[N.C5,.5],[N.E5,.5],[N.G5,1]],.15);bubbleAt(e,'¡Bravo!')});
+document.getElementById('cat').addEventListener('click',e=>{tone(700,0,.18,'sine',.1);tone(950,.12,.3,'sine',.08);bubbleAt(e,'¡Miau!')});
+document.getElementById('kids').addEventListener('click',e=>{
+  const k=e.target.closest('use');if(!k)return;k.classList.remove('hop');k.getBoundingClientRect();k.classList.add('hop');
+  const t=['¡Tía!','¡Tía Yubi!','¡La quiero!','¡Tía, mire!'];bubbleAt(e,t[Math.floor(Math.random()*t.length)]);tone(660+Math.random()*300,0,.15,'triangle',.08)});
+
+const lb=document.getElementById('lb'),lbImg=document.getElementById('lbImg'),lbCap=document.getElementById('lbCap');
+book.querySelectorAll('.pol').forEach(p=>{p.tabIndex=0;const open=()=>{const i=p.querySelector('img');lbImg.src=i.src;lbImg.alt=i.alt;lbCap.textContent=p.querySelector('figcaption').textContent;lb.classList.add('on')};p.addEventListener('click',open);p.addEventListener('keydown',e=>{if(e.key==='Enter')open()})});
+lb.addEventListener('click',()=>lb.classList.remove('on'));
+
+
+const vales=[...document.querySelectorAll('.vale')];let opened=0;
+function paintFoil(c){const r=c.getBoundingClientRect();const w=c.parentElement.clientWidth,h=c.parentElement.clientHeight;if(!w)return;const d=window.devicePixelRatio||1;c.width=w*d;c.height=h*d;const x=c.getContext('2d');x.setTransform(d,0,0,d,0,0);
+  const g=x.createLinearGradient(0,0,w,h);g.addColorStop(0,'#f48fb1');g.addColorStop(.5,'#f7c1d4');g.addColorStop(1,'#e8b45a');x.fillStyle=g;x.fillRect(0,0,w,h);
+  x.fillStyle='rgba(110,36,67,.28)';let sd=7;const rnd=()=>(sd=sd*16807%2147483647)/2147483647;for(let i=0;i<22;i++){const px=rnd()*w,py=rnd()*h;x.beginPath();x.ellipse(px,py,4+rnd()*3,3+rnd()*2,rnd()*3,0,7);x.fill()}
+  x.fillStyle='#fff';x.font='800 17px "Baloo 2",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('Raspa aquí',w/2,h/2-6);x.font='700 20px Caveat,cursive';x.fillText('♥',w/2,h/2+16)}
+vales.forEach(v=>{const c=v.querySelector('canvas');paintFoil(c);let drawing=false,n=0;const x=c.getContext('2d');
+  const scratch=e=>{const r=c.getBoundingClientRect();x.globalCompositeOperation='destination-out';x.beginPath();x.arc(e.clientX-r.left,e.clientY-r.top,18,0,7);x.fill();
+    if(++n%6===0){const d=x.getImageData(0,0,c.width,c.height).data;let t=0,cl=0;for(let i=3;i<d.length;i+=64){t++;if(d[i]===0)cl++}if(cl/t>.45)reveal()}};
+  const reveal=()=>{if(v.classList.contains('done'))return;v.classList.add('done');c.style.opacity=0;c.style.pointerEvents='none';opened++;tone(1046,0,.15,'triangle',.08);tone(1568,.1,.25,'triangle',.06);confetti(40);
+    if(opened===vales.length)document.getElementById('valesMsg').textContent='¡Los seis son tuyos! Guárdalos bien.'};
+  c.addEventListener('pointerdown',e=>{drawing=true;c.setPointerCapture(e.pointerId);scratch(e)});
+  c.addEventListener('pointermove',e=>{if(drawing)scratch(e)});
+  c.addEventListener('pointerup',()=>{drawing=false});c.addEventListener('pointercancel',()=>{drawing=false});
+});
+document.fonts&&document.fonts.ready.then(()=>vales.forEach(v=>{if(!v.classList.contains('done'))paintFoil(v.querySelector('canvas'))}));
+const sec=document.getElementById('secret'),lm=document.getElementById('lockMsg');let tries=0;
+sec.addEventListener('input',()=>{lm.textContent=''});
+function tryLock(){
+  const v=sec.value.trim();
+  if(!v){lm.textContent='Escribe un año primero';return}
+  if(v.replace(/\D/g,'')==='2022'||v.replace(/\D/g,'')==='22'){
+    unlocked=true;document.getElementById('lock').classList.add('lock-open');lm.textContent='¡Abierto! Sabía que te acordabas.';
+    melody([[N.C5,.5],[N.E5,.5],[N.G5,.5],[N.C5*2,1]],.14);confetti(70);setTimeout(()=>go(CAKE),1500);
+  }else{tries++;sec.classList.remove('shake');sec.offsetWidth;sec.classList.add('shake');tone(200,0,.25,'square',.05);
+    lm.textContent=tries<2?'Mmm, casi. Intenta otra vez.':'Pista: termina en 22…'}
+}
+document.getElementById('tryLock').addEventListener('click',tryLock);
+sec.addEventListener('keydown',e=>{if(e.key==='Enter')tryLock()});
+
+const candles=[...document.querySelectorAll('.candle')];
+function blow(c){
+  if(c.classList.contains('off'))return;c.classList.add('off');tone(300+Math.random()*80,0,.2,'sine',.05);
+  if(candles.every(x=>x.classList.contains('off'))&&!blown){
+    blown=true;
+    document.getElementById('micBtn').hidden=true;document.getElementById('micMsg').textContent='';setTimeout(()=>{document.getElementById('cakeTitle').textContent='¡Feliz cumpleaños, Yubita!';document.getElementById('cakeText').textContent='Que se cumpla todo lo que pediste.';document.getElementById('toLetter').hidden=false;confetti(220);melody(birthday,.34)},400);
+  }
+}
+candles.forEach(c=>c.addEventListener('click',()=>blow(c)));
+const cs=document.getElementById('cakeSvg');let down=false;
+cs.addEventListener('pointerdown',()=>{down=true});window.addEventListener('pointerup',()=>{down=false});
+cs.addEventListener('pointermove',e=>{if(!down&&e.pointerType!=='mouse')return;const t=document.elementFromPoint(e.clientX,e.clientY);const c=t&&t.closest&&t.closest('.candle');if(c&&(down||e.pointerType==='mouse'))blow(c)});
+cs.addEventListener('touchmove',e=>{const p=e.touches[0];const t=document.elementFromPoint(p.clientX,p.clientY);const c=t&&t.closest&&t.closest('.candle');if(c){blow(c)}},{passive:true});
+let micOn=false;
+document.getElementById('micBtn').addEventListener('click',async()=>{
+  const m=document.getElementById('micMsg');if(micOn||blown)return;
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+    const a=audio();const src=a.createMediaStreamSource(stream);const an=a.createAnalyser();an.fftSize=1024;src.connect(an);
+    const buf=new Float32Array(an.fftSize);micOn=true;m.textContent='¡Ahora sopla fuerte hacia el celular!';
+    const flames=[...document.querySelectorAll('.flame')];let acc=0;
+    const loop=()=>{
+      if(blown){stream.getTracks().forEach(t=>t.stop());return}
+      an.getFloatTimeDomainData(buf);let sum=0;for(let i=0;i<buf.length;i++)sum+=buf[i]*buf[i];const rms=Math.sqrt(sum/buf.length);
+      flames.forEach(f=>{f.style.transform=rms>.04?'skewX('+(-Math.min(rms*120,25))+'deg) scaleY('+Math.max(.6,1-rms*2)+')':''});
+      if(rms>.07){acc+=rms;if(acc>.9){acc=0;const c=candles.find(x=>!x.classList.contains('off'));if(c)blow(c)}}else acc=Math.max(0,acc-.03);
+      requestAnimationFrame(loop)};
+    loop();
+  }catch(e){m.textContent='Aquí no se pudo usar el micrófono. Apágalas tocándolas con el dedo.'}
+});
+document.getElementById('toLetter').addEventListener('click',()=>go(CAKE+1));
+
+paintDots();
+}
+</script>
+</body>
+</html>
